@@ -15,7 +15,6 @@ from typing import Callable, Optional, Tuple
 
 from fastapi import HTTPException, status
 from sqlmodel import Session, select
-from sqlalchemy import text
 
 from app.config import settings
 from app.models.user import User
@@ -77,10 +76,9 @@ def check_user_quota(db: Session, user_id: int, estimated_tokens: int = 0) -> Us
 
 def update_token_usage_atomic(db: Session, user_id: int, tokens_used: int) -> Tuple[int, int]:
     """
-    Atomically update user's token usage.
+    Update user's token usage.
     
-    Uses database-level atomic increment to prevent race conditions
-    during concurrent API calls from the same user.
+    Uses ORM-based update to avoid SQLite transaction conflicts.
     
     Args:
         db: Database session
@@ -90,34 +88,20 @@ def update_token_usage_atomic(db: Session, user_id: int, tokens_used: int) -> Tu
     Returns:
         Tuple of (new_tokens_used, token_limit)
     """
-    # Use raw SQL for atomic increment to prevent race conditions
-    # This ensures that concurrent requests don't overwrite each other
-    update_query = text("""
-        UPDATE users 
-        SET tokens_used = tokens_used + :tokens,
-            updated_at = :now
-        WHERE id = :user_id
-        RETURNING tokens_used, token_limit
-    """)
+    try:
+        # Use ORM to update token usage - safer for SQLite
+        user = db.get(User, user_id)
+        if user:
+            user.tokens_used = user.tokens_used + tokens_used
+            user.updated_at = datetime.utcnow()
+            db.add(user)
+            # Don't commit here - let the caller (route) handle the commit
+            # This prevents SQLite transaction conflicts
+            db.flush()  # Just flush to update the object
+            return user.tokens_used, user.token_limit
+    except Exception as e:
+        logger.error(f"Failed to update token usage: {e}")
     
-    result = db.execute(
-        update_query,
-        {
-            "tokens": tokens_used,
-            "now": datetime.utcnow(),
-            "user_id": user_id
-        }
-    )
-    db.commit()
-    
-    row = result.fetchone()
-    if row:
-        return row[0], row[1]
-    
-    # Fallback for SQLite which doesn't support RETURNING in older versions
-    user = db.get(User, user_id)
-    if user:
-        return user.tokens_used, user.token_limit
     return 0, settings.DEFAULT_USER_QUOTA
 
 

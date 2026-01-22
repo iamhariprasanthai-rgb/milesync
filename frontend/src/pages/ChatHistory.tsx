@@ -52,7 +52,7 @@ export default function ChatHistory() {
 
   const statusColors: Record<string, string> = {
     active: 'bg-green-100 text-green-700',
-    finalized: 'bg-blue-100 text-blue-700',
+    finalized: 'bg-primary-100 text-primary-700',
     completed: 'bg-gray-100 text-gray-700',
   };
 
@@ -60,7 +60,7 @@ export default function ChatHistory() {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-center py-16">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
         </div>
       </div>
     );
@@ -76,7 +76,7 @@ export default function ChatHistory() {
         </div>
         <Link
           to="/chat"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+          className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -102,7 +102,7 @@ export default function ChatHistory() {
           <p className="text-gray-500 mb-4">Start a conversation with your AI goal coach</p>
           <Link
             to="/chat"
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
           >
             Start Your First Chat
           </Link>

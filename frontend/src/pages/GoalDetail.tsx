@@ -153,7 +153,7 @@ export default function GoalDetail() {
 
   const statusColors: Record<string, string> = {
     active: 'bg-green-100 text-green-700',
-    completed: 'bg-blue-100 text-blue-700',
+    completed: 'bg-green-100 text-green-700',
     paused: 'bg-yellow-100 text-yellow-700',
     abandoned: 'bg-gray-100 text-gray-700',
   };
@@ -162,7 +162,7 @@ export default function GoalDetail() {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-center py-16">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
         </div>
       </div>
     );
@@ -171,14 +171,14 @@ export default function GoalDetail() {
   if (error || !goal) {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Link to="/goals" className="text-blue-600 hover:text-blue-700 text-sm mb-4 inline-block">
+        <Link to="/goals" className="text-primary-600 hover:text-primary-700 text-sm mb-4 inline-block">
           Back to Goals
         </Link>
         <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
           <p className="text-red-600 mb-4">{error || 'Goal not found'}</p>
           <Link
             to="/goals"
-            className="text-blue-600 hover:underline"
+            className="text-primary-600 hover:underline"
           >
             Return to Goals
           </Link>
@@ -190,7 +190,7 @@ export default function GoalDetail() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Back Link */}
-      <Link to="/goals" className="text-blue-600 hover:text-blue-700 text-sm mb-4 inline-block">
+      <Link to="/goals" className="text-primary-600 hover:text-primary-700 text-sm mb-4 inline-block">
         Back to Goals
       </Link>
 
@@ -229,9 +229,8 @@ export default function GoalDetail() {
           </div>
           <div className="w-full bg-gray-200 rounded-full h-3">
             <div
-              className={`h-3 rounded-full transition-all ${
-                goal.status === 'completed' ? 'bg-green-500' : 'bg-blue-600'
-              }`}
+              className={`h-3 rounded-full transition-all ${goal.status === 'completed' ? 'bg-green-500' : 'bg-primary-600'
+                }`}
               style={{ width: `${goal.progress}%` }}
             />
           </div>
@@ -330,11 +329,10 @@ function MilestoneCard({
       <div className={`p-4 ${milestone.is_completed ? 'bg-green-50' : 'bg-gray-50'}`}>
         <div className="flex items-center">
           <div
-            className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm font-medium ${
-              milestone.is_completed
+            className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm font-medium ${milestone.is_completed
                 ? 'bg-green-500 text-white'
                 : 'bg-gray-300 text-gray-600'
-            }`}
+              }`}
           >
             {milestone.is_completed ? '✓' : index + 1}
           </div>
@@ -345,14 +343,14 @@ function MilestoneCard({
                   type="text"
                   value={milestoneTitle}
                   onChange={(e) => setMilestoneTitle(e.target.value)}
-                  className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
                   placeholder="Milestone title"
                   autoFocus
                 />
                 <textarea
                   value={milestoneDescription}
                   onChange={(e) => setMilestoneDescription(e.target.value)}
-                  className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
                   placeholder="Description (optional)"
                   rows={2}
                 />
@@ -360,7 +358,7 @@ function MilestoneCard({
                   <button
                     type="submit"
                     disabled={!milestoneTitle.trim()}
-                    className="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                    className="px-3 py-1 text-xs bg-primary-600 text-white rounded hover:bg-primary-700 disabled:opacity-50"
                   >
                     Save
                   </button>
@@ -399,7 +397,7 @@ function MilestoneCard({
             </div>
             <button
               onClick={() => setIsEditingMilestone((prev) => !prev)}
-              className="text-gray-400 hover:text-blue-600 p-1"
+              className="text-gray-400 hover:text-primary-600 p-1"
               title="Edit milestone"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -448,7 +446,7 @@ function MilestoneCard({
         ) : (
           <button
             onClick={() => setShowAddTask(true)}
-            className="w-full py-2 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded flex items-center justify-center gap-1"
+            className="w-full py-2 text-sm text-primary-600 hover:text-primary-700 hover:bg-primary-50 rounded flex items-center justify-center gap-1"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -509,21 +507,21 @@ function TaskRow({ task, onTaskToggle, onDeleteTask, onUpdateTask }: TaskRowProp
             type="checkbox"
             checked={task.status === 'completed'}
             onChange={() => onTaskToggle(task)}
-            className="w-4 h-4 text-blue-600 rounded border-gray-300 cursor-pointer"
+            className="w-4 h-4 text-primary-600 rounded border-gray-300 cursor-pointer"
           />
           <div className="ml-3 flex-1">
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
               placeholder="Task title"
               autoFocus
             />
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full mt-1 px-2 py-1 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full mt-1 px-2 py-1 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
               placeholder="Description (optional)"
               rows={2}
             />
@@ -542,7 +540,7 @@ function TaskRow({ task, onTaskToggle, onDeleteTask, onUpdateTask }: TaskRowProp
           <button
             type="submit"
             disabled={!title.trim() || isSaving}
-            className="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+            className="px-3 py-1 text-xs bg-primary-600 text-white rounded hover:bg-primary-700 disabled:opacity-50"
           >
             Save
           </button>
@@ -564,13 +562,12 @@ function TaskRow({ task, onTaskToggle, onDeleteTask, onUpdateTask }: TaskRowProp
         type="checkbox"
         checked={task.status === 'completed'}
         onChange={() => onTaskToggle(task)}
-        className="w-4 h-4 text-blue-600 rounded border-gray-300 cursor-pointer"
+        className="w-4 h-4 text-primary-600 rounded border-gray-300 cursor-pointer"
       />
       <div className="ml-3 flex-1">
         <span
-          className={`text-sm ${
-            task.status === 'completed' ? 'text-gray-400 line-through' : 'text-gray-700'
-          }`}
+          className={`text-sm ${task.status === 'completed' ? 'text-gray-400 line-through' : 'text-gray-700'
+            }`}
         >
           {task.title}
         </span>
@@ -581,11 +578,10 @@ function TaskRow({ task, onTaskToggle, onDeleteTask, onUpdateTask }: TaskRowProp
       <div className="flex items-center gap-2">
         {task.priority !== 'medium' && (
           <span
-            className={`text-xs px-2 py-0.5 rounded ${
-              task.priority === 'high'
+            className={`text-xs px-2 py-0.5 rounded ${task.priority === 'high'
                 ? 'bg-red-100 text-red-700'
                 : 'bg-gray-100 text-gray-600'
-            }`}
+              }`}
           >
             {task.priority}
           </span>
@@ -598,7 +594,7 @@ function TaskRow({ task, onTaskToggle, onDeleteTask, onUpdateTask }: TaskRowProp
         <button
           type="button"
           onClick={() => setIsEditing(true)}
-          className="text-gray-400 hover:text-blue-600 p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+          className="text-gray-400 hover:text-primary-600 p-1 opacity-0 group-hover:opacity-100 transition-opacity"
           title="Edit task"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -648,7 +644,7 @@ function AddTaskForm({
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Task title..."
-        className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+        className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
         autoFocus
       />
       <select
@@ -663,7 +659,7 @@ function AddTaskForm({
       <button
         type="submit"
         disabled={!title.trim()}
-        className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+        className="px-3 py-1 text-sm bg-primary-600 text-white rounded hover:bg-primary-700 disabled:opacity-50"
       >
         Add
       </button>
@@ -699,7 +695,7 @@ function AddMilestoneButton({ onAdd }: { onAdd: (data: MilestoneCreate) => void 
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-1"
+        className="px-4 py-2 text-sm bg-primary-600 text-white rounded-lg hover:bg-primary-700 flex items-center gap-1"
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -716,13 +712,13 @@ function AddMilestoneButton({ onAdd }: { onAdd: (data: MilestoneCreate) => void 
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Milestone title..."
-        className="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+        className="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
         autoFocus
       />
       <button
         type="submit"
         disabled={!title.trim()}
-        className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+        className="px-4 py-2 text-sm bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
       >
         Add
       </button>

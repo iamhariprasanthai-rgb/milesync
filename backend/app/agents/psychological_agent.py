@@ -92,7 +92,8 @@ class PsychologicalAgent(BaseAgent):
     
     def get_system_prompt(self) -> str:
         """Get the Psychological Agent system prompt."""
-        return PSYCHOLOGICAL_SYSTEM_PROMPT
+        from app.services.ai_service import get_system_prompt
+        return get_system_prompt("psychological_system_prompt", PSYCHOLOGICAL_SYSTEM_PROMPT)
     
     async def process(self, context: AgentContext) -> AgentResponse:
         """
@@ -238,23 +239,32 @@ class PsychologicalAgent(BaseAgent):
         context: AgentContext,
         assessment: EmotionalAssessment
     ) -> AgentResponse:
-        """Provide general encouragement when no intervention needed."""
-        affirmations = [
-            "You're on the right track!",
-            "Your consistency is paying off.",
-            "Keep believing in yourself."
-        ]
+        """Provide general encouragement using the System Prompt."""
         
+        # Build prompt for specific encouragement
+        prompt = f"""Analyze the user's current state:
+        Motivation: {assessment.motivation_level}/10
+        Stress: {assessment.stress_level}/10
+        Confidence: {assessment.confidence_level}/10
+        
+        Provide a warm, encouraging response that acknowledges this state.
+        Focus on their progress and potential."""
+        
+        try:
+            # Use the LLM with the System Prompt to generate the response
+            message = await self.generate_response(context, prompt)
+        except Exception as e:
+            self.logger.error(f"Error generating encouragement: {e}")
+            message = "You're doing great! Even small steps count. Keep going!"
+            
         output = PsychologicalOutput(
             emotional_assessment=assessment,
-            intervention=None,
-            affirmations=affirmations,
-            progress_celebration="🌟 You're doing great! Keep up the momentum!"
+            progress_celebration="Keep moving forward!"
         )
         
         return self.create_response(
             success=True,
-            message=self._format_encouragement_message(output),
+            message=message,
             data=output.model_dump()
         )
     

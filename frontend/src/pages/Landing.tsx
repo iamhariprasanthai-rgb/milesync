@@ -2,21 +2,24 @@ import { Link } from 'react-router-dom';
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-orange-100">
       {/* Header */}
       <header className="py-6 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-blue-600">MileSync</h1>
+          <h1 className="text-4xl font-bold">
+            <span className="bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">Mile</span>
+            <span className="bg-gradient-to-r from-yellow-600 to-yellow-800 bg-clip-text text-transparent">Sync</span>
+          </h1>
           <div className="space-x-4">
             <Link
               to="/login"
-              className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-blue-600"
+              className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-primary-600"
             >
               Login
             </Link>
             <Link
               to="/register"
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+              className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700"
             >
               Get Started
             </Link>
@@ -37,7 +40,7 @@ export default function Landing() {
           </p>
           <Link
             to="/register"
-            className="inline-block px-8 py-4 text-lg font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all"
+            className="inline-block px-8 py-4 text-lg font-medium text-white bg-primary-600 rounded-xl hover:bg-primary-700 shadow-lg hover:shadow-xl transition-all"
           >
             Start Your Journey
           </Link>

@@ -219,14 +219,9 @@ export default function Analytics() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">
-                            <button
-                                onClick={() => navigate('/dashboard')}
-                                className="text-gray-400 hover:text-white transition-colors"
-                            >
-                                ← Back
-                            </button>
+
                             <div>
-                                <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                                <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
                                     AI Performance Analytics
                                 </h1>
                                 <p className="text-gray-400 text-sm">Powered by Opik Observability</p>
@@ -283,7 +278,7 @@ export default function Analytics() {
                     {/* SMART Goal Alignment */}
                     <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-2xl p-6 border border-gray-700/50 backdrop-blur-sm">
                         <div className="flex items-center space-x-3 mb-6">
-                            <div className="p-2 bg-purple-500/20 rounded-lg">
+                            <div className="p-2 bg-orange-500/20 rounded-lg">
                                 <span className="text-2xl">📊</span>
                             </div>
                             <div>
@@ -300,7 +295,7 @@ export default function Analytics() {
                     {/* Coaching Effectiveness */}
                     <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-2xl p-6 border border-gray-700/50 backdrop-blur-sm">
                         <div className="flex items-center space-x-3 mb-6">
-                            <div className="p-2 bg-blue-500/20 rounded-lg">
+                            <div className="p-2 bg-primary-500/20 rounded-lg">
                                 <span className="text-2xl">🎓</span>
                             </div>
                             <div>
@@ -334,7 +329,7 @@ export default function Analytics() {
                     {/* User Engagement */}
                     <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-2xl p-6 border border-gray-700/50 backdrop-blur-sm">
                         <div className="flex items-center space-x-3 mb-6">
-                            <div className="p-2 bg-pink-500/20 rounded-lg">
+                            <div className="p-2 bg-yellow-500/20 rounded-lg">
                                 <span className="text-2xl">📈</span>
                             </div>
                             <div>
@@ -395,9 +390,9 @@ export default function Analytics() {
 
                     <div className="mt-8 text-center">
                         <p className="text-gray-400 text-sm">
-                            Model: <span className="text-purple-400 font-mono">{performance?.model_version}</span>
+                            Model: <span className="text-orange-400 font-mono">{performance?.model_version}</span>
                             {' • '}
-                            Period: <span className="text-purple-400">{performance?.evaluation_period}</span>
+                            Period: <span className="text-orange-400">{performance?.evaluation_period}</span>
                         </p>
                     </div>
                 </section>
@@ -413,7 +408,7 @@ export default function Analytics() {
                                     To enable comprehensive LLM tracing and evaluation with Opik:
                                 </p>
                                 <ol className="mt-4 space-y-2 text-gray-400 text-sm list-decimal list-inside">
-                                    <li>Sign up for free at <a href="https://www.comet.com/opik" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 underline">comet.com/opik</a></li>
+                                    <li>Sign up for free at <a href="https://www.comet.com/opik" target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:text-orange-300 underline">comet.com/opik</a></li>
                                     <li>Create a new project and get your API key</li>
                                     <li>Add <code className="bg-gray-800 px-2 py-1 rounded">OPIK_API_KEY</code> to your <code className="bg-gray-800 px-2 py-1 rounded">.env</code> file</li>
                                     <li>Restart the backend server</li>

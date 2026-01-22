@@ -34,7 +34,7 @@ export default function Goals() {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-center py-16">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
         </div>
       </div>
     );
@@ -50,7 +50,7 @@ export default function Goals() {
         </div>
         <Link
           to="/chat"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+          className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
         >
           + New Goal
         </Link>
@@ -119,7 +119,7 @@ export default function Goals() {
           </p>
           <Link
             to="/chat"
-            className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            className="inline-block px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
           >
             Create Your First Goal
           </Link>
@@ -149,8 +149,8 @@ function GoalCard({ goal }: { goal: GoalListItem }) {
   };
 
   const statusColors: Record<string, string> = {
-    active: 'bg-green-100 text-green-700',
-    completed: 'bg-blue-100 text-blue-700',
+    active: 'bg-primary-100 text-primary-700',
+    completed: 'bg-green-100 text-green-700',
     paused: 'bg-yellow-100 text-yellow-700',
     abandoned: 'bg-gray-100 text-gray-700',
   };
@@ -185,9 +185,8 @@ function GoalCard({ goal }: { goal: GoalListItem }) {
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
-            className={`h-2 rounded-full transition-all ${
-              goal.status === 'completed' ? 'bg-green-500' : 'bg-blue-600'
-            }`}
+            className={`h-2 rounded-full transition-all ${goal.status === 'completed' ? 'bg-green-500' : 'bg-primary-600'
+              }`}
             style={{ width: `${goal.progress}%` }}
           />
         </div>

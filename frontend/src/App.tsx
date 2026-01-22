@@ -15,6 +15,7 @@ import Profile from './pages/Profile';
 import Analytics from './pages/Analytics';
 import DailyCheckin from './pages/DailyCheckin';
 import Insights from './pages/Insights';
+import AdminDashboard from './pages/AdminDashboard';
 
 // Components
 import Navbar from './components/common/Navbar';
@@ -26,7 +27,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
       </div>
     );
   }
@@ -122,6 +123,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <Insights />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                {/* Simple client-side check, backend also verifies */}
+                {user?.is_superuser ? <AdminDashboard /> : <Navigate to="/dashboard" />}
               </ProtectedRoute>
             }
           />

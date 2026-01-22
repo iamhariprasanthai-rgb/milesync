@@ -33,6 +33,8 @@ class UserResponse(BaseModel):
     name: str
     avatar_url: Optional[str] = None
     auth_provider: str
+    is_active: bool
+    is_superuser: bool
     created_at: datetime
 
     class Config:

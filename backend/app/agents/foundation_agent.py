@@ -68,7 +68,8 @@ class FoundationAgent(BaseAgent):
     
     def get_system_prompt(self) -> str:
         """Get the Foundation Agent system prompt."""
-        return FOUNDATION_SYSTEM_PROMPT
+        from app.services.ai_service import get_system_prompt
+        return get_system_prompt("foundation_system_prompt", FOUNDATION_SYSTEM_PROMPT)
     
     async def process(self, context: AgentContext) -> AgentResponse:
         """

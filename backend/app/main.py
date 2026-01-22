@@ -90,7 +90,7 @@ from app.models import (  # noqa: F401
 )
 
 # Import and include routers
-from app.routes import auth, chat, goals, dashboard, analytics, agents
+from app.routes import auth, chat, goals, dashboard, analytics, agents, admin
 
 app.include_router(auth.router, prefix="/api")
 app.include_router(chat.router, prefix="/api")
@@ -98,5 +98,6 @@ app.include_router(goals.router, prefix="/api")
 app.include_router(dashboard.router, prefix="/api")
 app.include_router(analytics.router, prefix="/api")
 app.include_router(agents.router, prefix="/api")
+app.include_router(admin.router, prefix="/api")
 
 

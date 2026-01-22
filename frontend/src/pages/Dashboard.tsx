@@ -42,7 +42,7 @@ export default function Dashboard() {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-center py-16">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
         </div>
       </div>
     );
@@ -55,7 +55,7 @@ export default function Dashboard() {
           <p className="text-red-600 mb-4">{error || 'Failed to load dashboard'}</p>
           <button
             onClick={loadDashboardData}
-            className="text-blue-600 hover:underline"
+            className="text-primary-600 hover:underline"
           >
             Try again
           </button>
@@ -87,7 +87,7 @@ export default function Dashboard() {
         <div className="bg-white rounded-xl shadow-sm p-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold text-gray-900">Upcoming Tasks</h2>
-            <Link to="/goals" className="text-sm text-blue-600 hover:text-blue-700">
+            <Link to="/goals" className="text-sm text-primary-600 hover:text-primary-700">
               View all
             </Link>
           </div>
@@ -110,7 +110,7 @@ export default function Dashboard() {
           <div className="space-y-3">
             <Link
               to="/chat"
-              className="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+              className="flex items-center p-4 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors"
             >
               <span className="text-2xl mr-4">💬</span>
               <div>
@@ -157,7 +157,7 @@ function StatCard({
   color: 'blue' | 'green' | 'orange' | 'purple';
 }) {
   const colorClasses = {
-    blue: 'bg-blue-50 text-blue-600',
+    blue: 'bg-primary-50 text-primary-600',
     green: 'bg-green-50 text-green-600',
     orange: 'bg-orange-50 text-orange-600',
     purple: 'bg-purple-50 text-purple-600',
@@ -210,14 +210,14 @@ function TaskItem({
     >
       <input
         type="checkbox"
-        className="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer"
+        className="w-5 h-5 text-primary-600 rounded border-gray-300 focus:ring-primary-500 cursor-pointer"
         onChange={() => { }}
       />
       <div className="ml-3 flex-1">
         <p className="text-sm font-medium text-gray-900">{task.title}</p>
         <Link
           to={`/goals/${task.goal_id}`}
-          className="text-xs text-blue-600 hover:underline"
+          className="text-xs text-primary-600 hover:underline"
           onClick={(e) => e.stopPropagation()}
         >
           {task.goal_title}

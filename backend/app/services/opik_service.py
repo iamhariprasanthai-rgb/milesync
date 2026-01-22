@@ -370,8 +370,10 @@ def log_chat_evaluation(
         coach_metric = GoalCoachingQualityMetric()
         quality_result = coach_metric.score(user_input, ai_response)
         
-        # Log to Opik
-        opik.track(
+        # Log to Opik using client.trace() method
+        # Don't pass custom id - let Opik generate UUIDv7 automatically
+        client = opik.Opik()
+        trace = client.trace(
             name="chat_evaluation",
             input={
                 "user_input": user_input,
@@ -383,10 +385,11 @@ def log_chat_evaluation(
                 "coaching_quality": quality_result,
             },
             metadata={
-                "trace_id": trace_id,
                 "evaluation_type": "coaching_quality",
             },
+            tags=["chat", "evaluation"],
         )
+        trace.end()
         
         return quality_result
         
@@ -442,8 +445,10 @@ def log_goal_extraction_evaluation(
             milestones_summary=milestones_summary,
         )
         
-        # Log to Opik
-        opik.track(
+        # Log to Opik using client.trace() method
+        # Don't pass custom id - let Opik generate UUIDv7 automatically
+        client = opik.Opik()
+        trace = client.trace(
             name="goal_extraction_evaluation",
             input={
                 "conversation_summary": conv_summary,
@@ -456,10 +461,11 @@ def log_goal_extraction_evaluation(
                 "extraction_quality": extraction_result,
             },
             metadata={
-                "trace_id": trace_id,
                 "evaluation_type": "goal_extraction",
             },
+            tags=["goal-extraction", "evaluation"],
         )
+        trace.end()
         
         return extraction_result
         

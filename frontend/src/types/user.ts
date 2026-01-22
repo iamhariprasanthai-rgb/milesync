@@ -4,6 +4,8 @@ export interface User {
   name: string;
   avatar_url?: string;
   auth_provider: 'email' | 'google' | 'github';
+  is_superuser: boolean;
+  is_active: boolean;
   created_at: string;
 }
 

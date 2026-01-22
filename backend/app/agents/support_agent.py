@@ -82,7 +82,8 @@ class SupportAgent(BaseAgent):
     
     def get_system_prompt(self) -> str:
         """Get the Support Agent system prompt."""
-        return SUPPORT_SYSTEM_PROMPT
+        from app.services.ai_service import get_system_prompt
+        return get_system_prompt("support_system_prompt", SUPPORT_SYSTEM_PROMPT)
     
     async def process(self, context: AgentContext) -> AgentResponse:
         """

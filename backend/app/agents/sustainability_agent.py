@@ -77,7 +77,8 @@ class SustainabilityAgent(BaseAgent):
     
     def get_system_prompt(self) -> str:
         """Get the Sustainability Agent system prompt."""
-        return SUSTAINABILITY_SYSTEM_PROMPT
+        from app.services.ai_service import get_system_prompt
+        return get_system_prompt("sustainability_system_prompt", SUSTAINABILITY_SYSTEM_PROMPT)
     
     async def process(self, context: AgentContext) -> AgentResponse:
         """

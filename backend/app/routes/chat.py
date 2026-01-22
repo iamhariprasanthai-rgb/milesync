@@ -212,37 +212,88 @@ async def send_message(
     )
     messages = db.exec(statement).all()
 
-    # Format for OpenAI
-    message_history = [
-        {"role": m.role, "content": m.content}
-        for m in messages
-    ]
-
-    # Generate AI response with quota tracking
+    # Generate AI response
+    ai_response = None
+    token_usage = None
+    
     try:
-        # Check quota before making API call
-        check_user_quota(db, current_user.id)
+        # Try to use Agent System
+        from app.agents.coordinator import get_agent_coordinator
+        from app.agents.base_agent import AgentContext
         
-        ai_response, token_usage = await ai_service.generate_chat_response_with_usage(message_history)
+        coordinator = get_agent_coordinator()
         
-        # Track token usage from OpenAI response
-        if token_usage:
+        # Prepare context
+        context_messages = [
+            {"role": m.role, "content": m.content}
+            for m in messages
+        ]
+        
+        # Get goal info if available
+        current_goal = None
+        if session.goal_id:
+            from app.models.goal import Goal
+            goal = db.get(Goal, session.goal_id)
+            if goal:
+                current_goal = goal.model_dump()
+        
+        agent_context = AgentContext(
+            user_id=current_user.id,
+            goal_id=session.goal_id,
+            session_id=session_id,
+            messages=context_messages,
+            current_goal=current_goal,
+            additional_context={"request_type": None}  # Allow routing to infer
+        )
+        
+        # Route request
+        agent_response = await coordinator.route(agent_context)
+        
+        if agent_response.success and agent_response.message:
+            ai_response = agent_response.message
+            # Combine generic message with specific output if available
+            if agent_response.agent_type == "psychological" and agent_response.data:
+                 pass # Message is already formatted by agent
+        else:
+            # Fallback if agent failed silently
+            logger.warning(f"Agent returned failure: {agent_response.message}")
+            raise Exception("Agent system did not produce response")
+            
+    except Exception as e:
+        logger.warning(f"Falling back to legacy AI service: {e}")
+        # Legacy AI service fallback
+        try:
+            # Format for OpenAI
+            message_history = [
+                {"role": m.role, "content": m.content}
+                for m in messages
+            ]
+            
+            # Check quota before making API call
+            check_user_quota(db, current_user.id)
+            
+            ai_response, token_usage = await ai_service.generate_chat_response_with_usage(message_history)
+        except ValueError:
+            ai_response = (
+                "I apologize, but I'm currently unable to process your request. "
+                "The AI service is not configured. Please contact support."
+            )
+        except Exception as inner_e:
+            if hasattr(inner_e, 'status_code') and inner_e.status_code == 429:
+                raise
+            logger.error(f"AI service error: {type(inner_e).__name__}: {inner_e}")
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="AI service temporarily unavailable",
+            )
+    
+    # Track token usage separately - don't fail the request if tracking fails
+    if token_usage:
+        try:
             usage_info = track_openai_usage(db, current_user.id, token_usage)
             logger.info(f"User {current_user.id} token usage: {usage_info.get('tokens_used_this_call', 0)} tokens")
-    except ValueError as e:
-        # Reason: Fallback for when OpenAI not configured (development mode)
-        ai_response = (
-            "I apologize, but I'm currently unable to process your request. "
-            "The AI service is not configured. Please contact support."
-        )
-    except Exception as e:
-        # Re-raise quota exceeded errors (429)
-        if hasattr(e, 'status_code') and e.status_code == 429:
-            raise
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="AI service temporarily unavailable",
-        )
+        except Exception as e:
+            logger.warning(f"Failed to track token usage: {type(e).__name__}: {e}")
 
     # Save assistant message
     assistant_message = ChatMessage(

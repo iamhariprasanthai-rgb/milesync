@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import type { ChatMessage, ChatSession } from '../types/chat';
 import * as chatApi from '../api/chat';
+import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 
 export default function Chat() {
   const [searchParams] = useSearchParams();
@@ -15,6 +16,11 @@ export default function Chat() {
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const { isListening, startListening, hasSupport } = useSpeechRecognition();
+
+  const handleVoiceInput = () => {
+    startListening((text) => setInput((prev) => (prev ? prev + ' ' + text : text)));
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -118,7 +124,7 @@ export default function Chat() {
     return (
       <div className="max-w-4xl mx-auto h-[calc(100vh-4rem)] flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500 mx-auto mb-4"></div>
           <p className="text-gray-600">Starting your coaching session...</p>
         </div>
       </div>
@@ -168,8 +174,8 @@ export default function Chat() {
         ))}
         {isLoading && (
           <div className="flex items-start">
-            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-              <span className="text-sm">AI</span>
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-yellow-500 flex items-center justify-center mr-3 shadow-sm">
+              <span className="text-xs text-white font-bold">AI</span>
             </div>
             <div className="bg-gray-100 rounded-2xl rounded-tl-none px-4 py-3">
               <div className="flex space-x-2">
@@ -198,13 +204,35 @@ export default function Chat() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Tell me about your goal..."
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              disabled={isLoading}
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              disabled={isLoading || isListening}
             />
+            {hasSupport && (
+              <button
+                type="button"
+                onClick={handleVoiceInput}
+                className={`p-3 rounded-xl transition-all ${isListening
+                  ? 'bg-red-100 text-red-600 animate-pulse'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                title="Speak to type"
+              >
+                {isListening ? (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                  </svg>
+                )}
+              </button>
+            )}
             <button
               type="submit"
               disabled={!input.trim() || isLoading}
-              className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Send
             </button>
@@ -212,7 +240,7 @@ export default function Chat() {
         ) : (
           <div className="text-center text-gray-500 py-2">
             This session has been finalized.{' '}
-            <button onClick={handleNewChat} className="text-blue-600 hover:underline">
+            <button onClick={handleNewChat} className="text-primary-600 hover:underline">
               Start a new chat
             </button>
           </div>
@@ -228,18 +256,18 @@ function ChatMessageBubble({ message }: { message: ChatMessage }) {
   return (
     <div className={`flex items-start ${isUser ? 'flex-row-reverse' : ''}`}>
       <div
-        className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium ${
-          isUser ? 'bg-blue-600 text-white ml-3' : 'bg-blue-100 text-blue-600 mr-3'
-        }`}
+        className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shadow-sm ${isUser
+          ? 'bg-gray-800 text-white ml-3'
+          : 'bg-gradient-to-br from-primary-500 to-yellow-500 text-white mr-3'
+          }`}
       >
-        {isUser ? 'You' : 'AI'}
+        {isUser ? 'ME' : 'AI'}
       </div>
       <div
-        className={`max-w-[70%] rounded-2xl px-4 py-3 ${
-          isUser
-            ? 'bg-blue-600 text-white rounded-tr-none'
-            : 'bg-gray-100 text-gray-900 rounded-tl-none'
-        }`}
+        className={`max-w-[70%] rounded-2xl px-4 py-3 ${isUser
+          ? 'bg-primary-600 text-white rounded-tr-none'
+          : 'bg-gray-100 text-gray-900 rounded-tl-none'
+          }`}
       >
         <p className="text-sm whitespace-pre-wrap">{message.content}</p>
       </div>

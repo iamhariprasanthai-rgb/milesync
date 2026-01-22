@@ -63,7 +63,7 @@ export default function Insights() {
         return (
             <div className="max-w-6xl mx-auto px-4 py-8">
                 <div className="flex items-center justify-center py-16">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
                 </div>
             </div>
         );
@@ -86,7 +86,7 @@ export default function Insights() {
                     <p className="text-gray-600 mb-4">Start tracking goals to see your insights!</p>
                     <Link
                         to="/chat"
-                        className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                        className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
                     >
                         Create Goal
                     </Link>
@@ -98,7 +98,7 @@ export default function Insights() {
                         <select
                             value={selectedGoalId || ''}
                             onChange={(e) => setSelectedGoalId(Number(e.target.value))}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                         >
                             {goals.map((goal) => (
                                 <option key={goal.id} value={goal.id}>{goal.title}</option>
@@ -109,7 +109,7 @@ export default function Insights() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {/* Sustainability Score Card */}
                         {insights && (
-                            <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl shadow-sm p-6 text-white">
+                            <div className="bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl shadow-sm p-6 text-white">
                                 <h2 className="text-lg font-semibold mb-4 flex items-center">
                                     <span className="mr-2">🌱</span>
                                     Sustainability Score
@@ -132,7 +132,7 @@ export default function Insights() {
                                 </div>
                                 <div className="flex justify-center mt-2">
                                     <span className={`px-3 py-1 rounded-full text-sm font-medium ${insights.burnout_risk === 'LOW' ? 'bg-green-400' :
-                                            insights.burnout_risk === 'MEDIUM' ? 'bg-yellow-400 text-yellow-900' : 'bg-red-400'
+                                        insights.burnout_risk === 'MEDIUM' ? 'bg-yellow-400 text-yellow-900' : 'bg-red-400'
                                         }`}>
                                         {insights.burnout_risk} Burnout Risk
                                     </span>
@@ -148,8 +148,8 @@ export default function Insights() {
                                     Habit Analysis
                                 </h2>
                                 <div className="grid grid-cols-2 gap-4 mb-4">
-                                    <div className="bg-blue-50 rounded-lg p-4 text-center">
-                                        <div className="text-3xl font-bold text-blue-600">
+                                    <div className="bg-primary-50 rounded-lg p-4 text-center">
+                                        <div className="text-3xl font-bold text-primary-600">
                                             {insights.habit_analysis.habit_score || 0}
                                         </div>
                                         <div className="text-sm text-gray-600">Habit Score</div>
@@ -206,7 +206,7 @@ export default function Insights() {
                                             <h3 className="text-sm font-medium text-gray-700">Best Times</h3>
                                             <div className="flex flex-wrap gap-2 mt-1">
                                                 {insights.pattern_insights.best_times.map((time: string, i: number) => (
-                                                    <span key={i} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+                                                    <span key={i} className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm">
                                                         {time}
                                                     </span>
                                                 ))}
@@ -239,8 +239,8 @@ export default function Insights() {
                                 </h2>
                                 <div className="space-y-3">
                                     {insights.recommendations.map((rec: string, i: number) => (
-                                        <div key={i} className="flex items-start p-3 bg-purple-50 rounded-lg">
-                                            <span className="text-purple-500 mr-3 mt-0.5">{i + 1}.</span>
+                                        <div key={i} className="flex items-start p-3 bg-orange-50 rounded-lg">
+                                            <span className="text-orange-500 mr-3 mt-0.5">{i + 1}.</span>
                                             <span className="text-sm text-gray-700">{rec}</span>
                                         </div>
                                     ))}
@@ -277,7 +277,7 @@ export default function Insights() {
                                                     href={resource.url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="mt-3 inline-block text-sm text-blue-600 hover:text-blue-700"
+                                                    className="mt-3 inline-block text-sm text-primary-600 hover:text-primary-700"
                                                 >
                                                     Learn more →
                                                 </a>

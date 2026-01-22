@@ -6,6 +6,7 @@ from app.models.chat import ChatSession, ChatMessage
 from app.models.goal import Goal, Milestone, Task, GoalType, TaskFrequency
 from app.models.user_profile import UserProfile
 from app.models.sustainability import HabitLoop, UserInsight, DailyProgress
+from app.models.prompt import SystemPrompt
 
 __all__ = [
     "User",
@@ -20,5 +21,6 @@ __all__ = [
     "HabitLoop",
     "UserInsight",
     "DailyProgress",
+    "SystemPrompt",
 ]
 

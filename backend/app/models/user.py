@@ -27,6 +27,7 @@ class User(SQLModel, table=True):
     avatar_url: Optional[str] = Field(default=None, max_length=500)
     auth_provider: AuthProvider = Field(default=AuthProvider.EMAIL)
     is_active: bool = Field(default=True)
+    is_superuser: bool = Field(default=False)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     

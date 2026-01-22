@@ -5,6 +5,7 @@ Integrated with Opik for comprehensive LLM observability and evaluation.
 
 import json
 import uuid
+from datetime import datetime
 from typing import List, Optional
 
 from openai import OpenAI
@@ -29,8 +30,46 @@ except ImportError:
 # Default model for all AI conversations
 AI_MODEL = "gpt-4o-mini"
 
-# System prompt for the AI goal coach
-SYSTEM_PROMPT = """You are an AI goal coach for MileSync. Your role is to help users define SMART goals
+from sqlmodel import Session, select, create_engine
+from app.models.prompt import SystemPrompt
+
+# ... imports ...
+
+# Default model for all AI conversations
+AI_MODEL = "gpt-4o-mini"
+
+# In-memory cache for prompts
+_prompt_cache = {}
+
+def get_db_session():
+    """Create a new database session."""
+    connect_args = {"check_same_thread": False} if settings.DATABASE_URL.startswith("sqlite") else {}
+    engine = create_engine(settings.DATABASE_URL, connect_args=connect_args)
+    return Session(engine)
+
+def get_system_prompt(key: str, default: str) -> str:
+    """Get system prompt from cache or DB."""
+    if key in _prompt_cache:
+        return _prompt_cache[key]
+        
+    try:
+        with get_db_session() as session:
+            prompt = session.exec(select(SystemPrompt).where(SystemPrompt.key == key)).first()
+            if prompt:
+                _prompt_cache[key] = prompt.content
+                return prompt.content
+    except Exception as e:
+        print(f"Error fetching prompt {key}: {e}")
+        
+    return default
+
+def clear_prompt_cache():
+    """Clear the prompt cache."""
+    global _prompt_cache
+    _prompt_cache = {}
+
+# Default prompts
+DEFAULT_CHAT_SYSTEM = """You are an AI goal coach for MileSync. Your role is to help users define SMART goals
 (Specific, Measurable, Achievable, Relevant, Time-bound), understand their motivations,
 identify potential obstacles, and create actionable plans.
 
@@ -89,7 +128,7 @@ def format_messages_for_openai(
     if include_system:
         formatted.append({
             "role": "system",
-            "content": SYSTEM_PROMPT
+            "content": get_system_prompt("chat_system_prompt", DEFAULT_CHAT_SYSTEM)
         })
 
     for msg in messages:
@@ -335,9 +374,10 @@ async def extract_goal_from_conversation(messages: List[dict]) -> Optional[AIGoa
         for m in messages
     ])
 
-    extraction_prompt = f"""Based on the following goal coaching conversation, extract a structured goal with milestones and tasks.
+    default_template = """Based on the following goal coaching conversation, extract a structured goal with milestones and tasks.
 
 The goal should be SMART (Specific, Measurable, Achievable, Relevant, Time-bound).
+Today's date is {date}. IMPORTANT: Ensure all target dates (goal and milestones) are strictly in the future, starting after {date}.
 Create 3-7 milestones that logically progress toward the goal.
 Each milestone should have 2-5 specific, actionable tasks.
 
@@ -346,12 +386,23 @@ Conversation:
 
 Extract the goal structure using the provided function."""
 
+    template = get_system_prompt("goal_extraction_template", default_template)
+    current_date = datetime.utcnow().strftime('%Y-%m-%d')
+    # Use formatted date in prompt to ground the model
+    try:
+        extraction_prompt = template.format(conversation=conversation, date=current_date)
+    except KeyError:
+        # Fallback if custom template doesn't support {date}
+        extraction_prompt = template.format(conversation=conversation) + f"\n\nToday's date is {current_date}."""
+    
+    system_role = get_system_prompt("goal_extraction_system", "You are a goal extraction assistant. Analyze conversations and extract structured goals.")
+
     response = client.chat.completions.create(
         model=AI_MODEL,
         messages=[
             {
                 "role": "system",
-                "content": "You are a goal extraction assistant. Analyze conversations and extract structured goals."
+                "content": system_role
             },
             {
                 "role": "user",

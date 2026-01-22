@@ -67,7 +67,8 @@ class ExecutionAgent(BaseAgent):
     
     def get_system_prompt(self) -> str:
         """Get the Execution Agent system prompt."""
-        return EXECUTION_SYSTEM_PROMPT
+        from app.services.ai_service import get_system_prompt
+        return get_system_prompt("execution_system_prompt", EXECUTION_SYSTEM_PROMPT)
     
     async def process(self, context: AgentContext) -> AgentResponse:
         """

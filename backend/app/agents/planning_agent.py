@@ -80,7 +80,8 @@ class PlanningAgent(BaseAgent):
     
     def get_system_prompt(self) -> str:
         """Get the Planning Agent system prompt."""
-        return PLANNING_SYSTEM_PROMPT
+        from app.services.ai_service import get_system_prompt
+        return get_system_prompt("planning_system_prompt", PLANNING_SYSTEM_PROMPT)
     
     async def process(self, context: AgentContext) -> AgentResponse:
         """
