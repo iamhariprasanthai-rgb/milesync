@@ -166,14 +166,30 @@ export async function getDailyTasks(goalId?: number): Promise<{
     return response.data;
 }
 
+export interface ExecutionSummary {
+    motivational_message: string;
+    next_actions: string[];
+}
+
+export interface SustainabilityInsights {
+    sustainability_score: number;
+    burnout_risk: string;
+    recommendations: string[];
+}
+
+export interface PsychologicalSupport {
+    intervention?: Intervention;
+    affirmations: string[];
+}
+
 export async function dailyCheckin(
     goalId: number,
     completedTaskIds: number[] = [],
     notes?: string
 ): Promise<{
-    execution: Record<string, unknown>;
-    sustainability: Record<string, unknown>;
-    psychological?: Record<string, unknown>;
+    execution: ExecutionSummary;
+    sustainability: SustainabilityInsights;
+    psychological?: PsychologicalSupport;
 }> {
     const response = await api.post('/api/agents/checkin', {
         goal_id: goalId,

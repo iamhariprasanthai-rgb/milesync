@@ -15,7 +15,9 @@ export default function DailyCheckin() {
     const [notes, setNotes] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [checkinResult, setCheckinResult] = useState<any>(null);
+    // Infer strict type from API
+    type CheckinData = Awaited<ReturnType<typeof agentsApi.dailyCheckin>>;
+    const [checkinResult, setCheckinResult] = useState<CheckinData | null>(null);
     const [dailySummary, setDailySummary] = useState<any>(null);
     const { isListening, startListening, hasSupport } = useSpeechRecognition();
 
