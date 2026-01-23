@@ -410,8 +410,8 @@ export default function Analytics() {
                                 <ol className="mt-4 space-y-2 text-gray-400 text-sm list-decimal list-inside">
                                     <li>Sign up for free at <a href="https://www.comet.com/opik" target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:text-orange-300 underline">comet.com/opik</a></li>
                                     <li>Create a new project and get your API key</li>
-                                    <li>Add <code className="bg-gray-800 px-2 py-1 rounded">OPIK_API_KEY</code> to your <code className="bg-gray-800 px-2 py-1 rounded">.env</code> file</li>
-                                    <li>Restart the backend server</li>
+                                    <li>Add <code className="bg-gray-800 px-2 py-1 rounded">OPIK_API_KEY</code> to your Environment Variables in Render Dashboard</li>
+                                    <li>Redeploy the backend service</li>
                                 </ol>
                             </div>
                         </div>
