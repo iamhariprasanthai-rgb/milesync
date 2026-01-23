@@ -38,9 +38,7 @@ export default function Register() {
     }
   };
 
-  const handleOAuthLogin = (provider: 'google' | 'github') => {
-    window.location.href = `/api/auth/${provider}`;
-  };
+
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -60,13 +58,7 @@ export default function Register() {
         <div className="bg-white py-8 px-4 shadow-lg sm:rounded-lg sm:px-10">
           {/* OAuth Buttons */}
           <div className="space-y-3">
-            <button
-              onClick={() => handleOAuthLogin('google')}
-              className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white hover:bg-gray-50 transition-colors"
-            >
-              <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5 mr-3" />
-              <span className="text-sm font-medium text-gray-700">Continue with Google</span>
-            </button>
+
 
           </div>
 
