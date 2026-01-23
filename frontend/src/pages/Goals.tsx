@@ -130,14 +130,7 @@ export default function Goals() {
 }
 
 function GoalCard({ goal }: { goal: GoalListItem }) {
-  const categoryEmoji: Record<GoalCategory, string> = {
-    health: 'Fitness',
-    education: 'Books',
-    finance: 'Money',
-    career: 'Briefcase',
-    personal: 'Star',
-    other: 'Target',
-  };
+
 
   const categoryLabels: Record<GoalCategory, string> = {
     health: 'Health',
