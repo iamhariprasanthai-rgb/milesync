@@ -106,7 +106,8 @@ function App() {
             path="/analytics"
             element={
               <ProtectedRoute>
-                <Analytics />
+                {/* Analytics is only for admin/superusers */}
+                {user?.is_superuser ? <Analytics /> : <Navigate to="/dashboard" />}
               </ProtectedRoute>
             }
           />

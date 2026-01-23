@@ -26,7 +26,8 @@ export default function Navbar() {
     { path: '/goals', label: 'My Goals' },
     { path: '/checkin', label: 'Check-in' },
     { path: '/insights', label: 'Insights' },
-    { path: '/analytics', label: 'Analytics' },
+    // Analytics is only visible to admin users
+    ...(user?.is_superuser ? [{ path: '/analytics', label: 'Analytics' }] : []),
   ];
 
   // Get user initials
