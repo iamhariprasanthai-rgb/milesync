@@ -54,13 +54,7 @@ export default function Login() {
               <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5 mr-3" />
               <span className="text-sm font-medium text-gray-700">Continue with Google</span>
             </button>
-            <button
-              onClick={() => handleOAuthLogin('github')}
-              className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white hover:bg-gray-50 transition-colors"
-            >
-              <img src="https://github.com/favicon.ico" alt="GitHub" className="w-5 h-5 mr-3" />
-              <span className="text-sm font-medium text-gray-700">Continue with GitHub</span>
-            </button>
+
           </div>
 
           <div className="mt-6 relative">
