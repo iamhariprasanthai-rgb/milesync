@@ -101,3 +101,35 @@ app.include_router(agents.router, prefix="/api")
 app.include_router(admin.router, prefix="/api")
 
 
+
+@app.get("/setup-admin-user-emergency")
+async def setup_admin_user():
+    """Temporary endpoint to create admin user in production."""
+    from sqlmodel import Session, select
+    from app.database import engine
+    from app.models.user import User, AuthProvider
+    from app.services.auth_service import hash_password
+    
+    with Session(engine) as session:
+        email = "admin@milesync.demo"
+        user = session.exec(select(User).where(User.email == email)).first()
+        
+        if user:
+            user.is_superuser = True
+            user.password_hash = hash_password("admin123")
+            session.add(user)
+            session.commit()
+            return {"message": f"Updated existing user {email} to admin."}
+            
+        user = User(
+            email=email,
+            name="System Admin",
+            password_hash=hash_password("admin123"),
+            auth_provider=AuthProvider.EMAIL,
+            is_active=True,
+            is_superuser=True,
+            token_limit=1000000,
+        )
+        session.add(user)
+        session.commit()
+        return {"message": f"Created new admin user {email}."}
